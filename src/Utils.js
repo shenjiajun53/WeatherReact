@@ -2,6 +2,9 @@
  * Created by shenjiajun on 2016/3/21.
  */
 var APIKEY = "0efd9b4f14275d37789a2f57e5101852";
+
+const lang = "zh-CN";
+
 function buildUrl(url, parameters) {
     var qs = "";
     for (var key in parameters) {
@@ -279,28 +282,28 @@ function getBackgroundColor(id) {
 }
 
 
-function currentWeatherUrl(lantitude, longitude, lang) {
+export function currentWeatherUrl(lantitude, longitude) {
     var url = "http://api.weather.com/v1/" + "geocode/" + lantitude + "/" + longitude + "/" + "observations/current.json?apiKey=" + APIKEY + "&language=" + lang + "&units=m";
     return encodeURI(url);
 }
 
-function forcastHourlyWeatherUrl(lantitude, longitude, lang) {
+export function forcastHourlyWeatherUrl(lantitude, longitude) {
     var url = "http://api.weather.com/v1/" + "geocode/" + lantitude + "/" + longitude + "/" + "forecast/hourly/24hour.json?apiKey=" + APIKEY + "&language=" + lang + "&units=m";
     return encodeURI(url);
 }
 
-function forecastDailyWeatherUrl(lantitude, longitude, lang) {
+export function forecastDailyWeatherUrl(lantitude, longitude) {
     var url = "http://api.weather.com/v1/" + "geocode/" + lantitude + "/" + longitude + "/" + "forecast/daily/5day.json?apiKey=" + APIKEY + "&language=" + lang + "&units=m";
     return encodeURI(url);
 }
 
 
-function findCityByGeoLocation(geolocation, lang, withLang) {
+export function findCityByGeoLocation(geolocation) {
     var url = "http://api.weather.com/v2/location?" + "geocode=" + geolocation + "&language=" + lang + "&format=" + "json" + "&apiKey=" + APIKEY;
     return encodeURI(url);
 }
 
-export function findCityByName(name, lang, withLang) {
+export function findCityByName(name) {
     var url = "http://api.weather.com/v2/location?" + "address=" + name + "&language=" + lang + "&format=" + "json" + "&apiKey=" + APIKEY;
     var temp = "http://api.weather.com/v2/location?address=%E4%B8%8A%E6%B5%B7&language=zh-CN&format=json&apiKey=0efd9b4f14275d37789a2f57e5101852";
     return encodeURI(url);
@@ -330,7 +333,7 @@ export var cityBean = {
     }]
 };
 
-var addressBean = {
+export var addressBean = {
     "latitude": 31.22,
     "longitude": 121.54,
     "address": "丁香路",
@@ -340,7 +343,7 @@ var addressBean = {
     "country_code": "CN"
 };
 
-var currentWeatherBean = {
+export var currentWeatherBean = {
     "metadata": {
         "language": "zh-CN",
         "transaction_id": "1458546612249:-1457749884",
@@ -357,19 +360,19 @@ var currentWeatherBean = {
         "obs_time": 1458545400,
         "obs_time_local": "2016-03-21T15:30:00+0800",
         "wdir": 110,
-        "icon_code": 34,
+        "icon_code": 34,                           //icon
         "icon_extd": 3400,
         "sunrise": "2016-03-21T05:56:33+0800",
         "sunset": "2016-03-21T18:05:54+0800",
         "day_ind": "D",
-        "uv_index": 3,
+        "uv_index": 3,                          //uv_index
         "uv_warning": 0,
         "wxman": "wx1000",
         "obs_qualifier_code": null,
         "ptend_code": 2,
         "dow": "星期一",
         "wdir_cardinal": "東南偏東風",
-        "uv_desc": "中等",
+        "uv_desc": "中等",                        //uv_desc
         "phrase_12char": null,
         "phrase_22char": null,
         "phrase_32char": "晴朗",
@@ -379,21 +382,21 @@ var currentWeatherBean = {
         "obs_qualifier_severity": null,
         "vocal_key": "OT59:OX3400",
         "metric": {
-            "wspd": 14,
+            "wspd": 14,                   //windSpeed
             "gust": null,
-            "vis": 9.99,
-            "mslp": 1021.0,
+            "vis": 9.99,                  //visibility
+            "mslp": 1021.0,             //pressure
             "altimeter": 1021.0,
             "temp": 15,
             "dewpt": 6,
-            "rh": 55,
+            "rh": 55,                    //humidity
             "wc": 15,
             "hi": 15,
             "temp_change_24hour": -20,
             "temp_max_24hour": 17,
             "temp_min_24hour": 8,
             "pchange": -1.02,
-            "feels_like": 15,
+            "feels_like": 15,              //realfeel
             "snow_1hour": 0.0,
             "snow_6hour": 0.0,
             "snow_24hour": 0.0,
@@ -406,7 +409,7 @@ var currentWeatherBean = {
             "ceiling": null,
             "precip_1hour": 0.0,
             "precip_6hour": 0.0,
-            "precip_24hour": 0.0,
+            "precip_24hour": 0.0,               //precipitation
             "precip_mtd": null,
             "precip_ytd": null,
             "precip_2day": null,
@@ -419,7 +422,7 @@ var currentWeatherBean = {
     }
 };
 
-var dailyWeatherBean = {
+export var dailyWeatherBean = {
     "metadata": {
         "language": "zh-CN",
         "transaction_id": "1458701243206:-1716831011",
@@ -690,7 +693,7 @@ var dailyWeatherBean = {
 };
 
 
-var hourlyWeatherBean = {
+export var hourlyWeatherBean = {
     "metadata": {
         "language": "zh-CN",
         "transaction_id": "1458701084434:-437149432",

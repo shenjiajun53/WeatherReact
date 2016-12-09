@@ -4,12 +4,13 @@
 
 import React from 'react';
 import {Row, Col, AutoComplete, Card, Select} from 'antd';
-import CurrentWeatherCard from './CurrentWeatherCard'
 import logo from '../logo.svg';
 import 'whatwg-fetch'
 import {findCityByName, cityBean} from  '../Utils.js'
+import CurrentWeatherCard from './CurrentWeatherCard'
+import HourlyWeatherComponent from './HourlyWeatherComponent'
+import DailyWeatherComponent from './DailyWeatherComponent'
 
-const lang = "zh-CN";
 let mCityBean = cityBean;
 
 class TitleBar extends React.Component {
@@ -22,16 +23,15 @@ class TitleBar extends React.Component {
     }
 
     handleChange(value) {
-        let url = findCityByName(value, lang, true);
+        let url = findCityByName(value);
         console.log("input = " + value);
-        // console.log("start handle");
         fetch(url)
             .then(
                 (response) => response.json()
             ).then(
             (json) => {
+                console.dir(JSON.stringify(json));
                 mCityBean = json;
-                // console.dir(JSON.stringify(mCityBean));
                 if (cityBean.metadata.status_code == 200) {
                     this.setState({
                         addressList: mCityBean.addresses,
@@ -47,20 +47,16 @@ class TitleBar extends React.Component {
         ).catch(
             (ex) => {
                 console.error('parsing failed', ex);
-                // this.setState({
-                //     addressList: null,
-                //     inputValue: ""
-                // });
             });
-        // console.log("done handle");
     }
 
     onSelect(value) {
         console.log('onSelect', value);
+        this.props.getSelectedLocation(value);
     }
 
     render() {
-        console.log("start render");
+        // console.log("start render");
         // console.log(JSON.stringify(this.state.addressList));
         // let addressOption = new Array();
         // if (null != this.state.addressList) {
@@ -79,9 +75,9 @@ class TitleBar extends React.Component {
         if (null != this.state.addressList) {
             addressOption = this.state.addressList.map(
                 (addressBean) => {
-                    console.dir(JSON.stringify(addressBean));
+                    // console.dir(JSON.stringify(addressBean));
                     return <AutoComplete.Option
-                        key={addressBean.latitude + " " + addressBean.longitude}>
+                        key={addressBean.latitude + "_" + addressBean.longitude + "_" + addressBean.address}>
                         {addressBean.address}
                     </AutoComplete.Option>;
                 }
@@ -99,14 +95,55 @@ class TitleBar extends React.Component {
                             combobox
                             filterOption={false}
                             style={{width: 300}}
-                            onSelect={(value) => this.onSelect(value)}
-                            onChange={(value) => this.handleChange(value)}
+                            onSelect={(value) => this.props.getSelectedLocation(value)}
+                            onSearch={(value) => this.handleChange(value)}
                             placeholder="输入城市名"
                         >
                             {addressOption}
                         </AutoComplete>
                     </Col>
                 </Row>
+            </div>
+        );
+    }
+}
+
+class MainComponent extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            latitude: null,
+            longitude: null,
+            address: null,
+        }
+    }
+
+    getSelectedLocation(value) {
+        console.log("selectedLocation=" + value);
+        let strArray = value.split("_");
+        // console.log(strArray[0]);
+        // console.log(strArray[1]);
+        this.setState(
+            {
+                latitude: strArray[0],
+                longitude: strArray[1],
+                address: strArray[2]
+            }
+        )
+    }
+
+    render() {
+        console.log("start render");
+        return (
+            <div>
+                <TitleBar getSelectedLocation={(value) => this.getSelectedLocation(value)}/>
+                <CurrentWeatherCard address={this.state.address}
+                                    latitude={this.state.latitude}
+                                    longitude={this.state.longitude}/>
+                <HourlyWeatherComponent latitude={this.state.latitude}
+                                        longitude={this.state.longitude}/>
+                <DailyWeatherComponent latitude={this.state.latitude}
+                                       longitude={this.state.longitude}/>
             </div>
         );
     }
@@ -145,21 +182,6 @@ class TitleBar2 extends React.Component {
             >
                 {children}
             </AutoComplete>
-        );
-    }
-}
-
-class MainComponent extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <div>
-                <TitleBar/>
-                <CurrentWeatherCard/>
-            </div>
         );
     }
 }
