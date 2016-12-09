@@ -4,7 +4,7 @@
 import React from 'react';
 import {Card} from 'antd';
 import {Row, Col} from 'antd';
-import {forecastDailyWeatherUrl, dailyWeatherBean} from  '../Utils.js'
+import {forecastDailyWeatherUrl} from  '../Utils.js'
 
 const defStyle = {
     marginRight: '100px',
@@ -15,7 +15,7 @@ const defStyle = {
 
 let mLatitude;
 let mLongitude;
-let mDailyWeatherBean;
+
 
 class DailyWeatherComponent extends React.Component {
     constructor(props) {
@@ -32,7 +32,7 @@ class DailyWeatherComponent extends React.Component {
                 (response) => response.json()
             ).then(
             (json) => {
-                mDailyWeatherBean = json;
+                let mDailyWeatherBean = json;
                 console.dir(JSON.stringify(json));
                 if (mDailyWeatherBean.metadata.status_code == 200) {
                     this.setState({
@@ -57,14 +57,29 @@ class DailyWeatherComponent extends React.Component {
             this.getDailyWeather();
         }
 
-        if (null != dailyWeatherBean) {
+        if (null != this.state.dailyWeatherBean) {
+            let dailyList = this.state.dailyWeatherBean.forecasts;
+            let dailyItemList = dailyList.map(
+                (dailyItem) => {
+                    return <li key={dailyItem.num}>
+                        <div>
+                            {"High "+dailyItem.max_temp}
+                        </div>
+                        <div>
+                            {"Low "+dailyItem.min_temp}
+                        </div>
+                    </li>
+                }
+            );
             return (
                 <Card style={defStyle}>
-
+                    <ul>
+                        {dailyItemList}
+                    </ul>
                 </Card>
             )
         } else {
-            <div></div>
+            return (<div></div>)
         }
 
     }

@@ -4,7 +4,7 @@
 import React from 'react';
 import {Card} from 'antd';
 import {Row, Col} from 'antd';
-import {forcastHourlyWeatherUrl, hourlyWeatherBean} from  '../Utils.js'
+import {forcastHourlyWeatherUrl} from  '../Utils.js'
 
 const defStyle = {
     marginRight: '100px',
@@ -15,7 +15,6 @@ const defStyle = {
 
 let mLatitude;
 let mLongitude;
-let mHourlyWeatherBean;
 
 class HourlyWeatherComponent extends React.Component {
     constructor(props) {
@@ -32,7 +31,7 @@ class HourlyWeatherComponent extends React.Component {
                 (response) => response.json()
             ).then(
             (json) => {
-                mHourlyWeatherBean = json;
+                let mHourlyWeatherBean = json;
                 console.dir(JSON.stringify(json));
                 if (mHourlyWeatherBean.metadata.status_code == 200) {
                     this.setState({
@@ -50,6 +49,16 @@ class HourlyWeatherComponent extends React.Component {
             });
     }
 
+    formatTime(time) {
+        time = time.substring(11, 16);
+        return time;
+    }
+
+    getIconById(iconId) {
+
+        return iconId;
+    }
+
     render() {
         if (mLatitude != this.props.latitude && mLongitude != this.props.longitude) {
             mLatitude = this.props.latitude;
@@ -57,9 +66,27 @@ class HourlyWeatherComponent extends React.Component {
             this.getHourlyWeather();
         }
         if (null != this.state.hourlyWeatherBean) {
+            let forcastList = this.state.hourlyWeatherBean.forecasts;
+            let focastItemList = forcastList.map(
+                (forecastItem) => {
+                    return <Col lg={1} md={3} sm={6} key={forecastItem.num}>
+                        <div>
+                            {this.formatTime(forecastItem.fcst_valid_local)}
+                        </div>
+                        <div>
+                            {this.getIconById(forecastItem.icon_code)}
+                        </div>
+                        <div>
+                            {forecastItem.temp}
+                        </div>
+                    </Col>
+                }
+            );
             return (
                 <Card style={defStyle}>
-
+                    <Row type="flex" align="middle" justify="space-around">
+                        {focastItemList}
+                    </Row>
                 </Card>
             )
         } else {
@@ -68,7 +95,6 @@ class HourlyWeatherComponent extends React.Component {
                 </div>
             )
         }
-
     }
 }
 export default HourlyWeatherComponent;
