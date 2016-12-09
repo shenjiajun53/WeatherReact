@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import {Row, Col, AutoComplete, Card} from 'antd';
+import {Row, Col, AutoComplete, Card, Select} from 'antd';
 import CurrentWeatherCard from './CurrentWeatherCard'
 import logo from '../logo.svg';
 import 'whatwg-fetch'
@@ -17,25 +17,41 @@ class TitleBar extends React.Component {
         super(props);
         this.state = {
             addressList: [],
+            inputValue: ""
         }
     }
 
     handleChange(value) {
         let url = findCityByName(value, lang, true);
-        // console.log(url);
+        console.log("input = " + value);
         // console.log("start handle");
         fetch(url)
-            .then(function (response) {
-                return response.json()
-            }).then(
+            .then(
+                (response) => response.json()
+            ).then(
             (json) => {
                 mCityBean = json;
-                console.log(mCityBean);
-                this.setState({
-                    addressList: mCityBean.addresses
-                });
+                // console.dir(JSON.stringify(mCityBean));
+                if (cityBean.metadata.status_code == 200) {
+                    this.setState({
+                        addressList: mCityBean.addresses,
+                        inputValue: value
+                    });
+                } else {
+                    this.setState({
+                        addressList: null,
+                        inputValue: null
+                    });
+                }
             }
-        );
+        ).catch(
+            (ex) => {
+                console.error('parsing failed', ex);
+                // this.setState({
+                //     addressList: null,
+                //     inputValue: ""
+                // });
+            });
         // console.log("done handle");
     }
 
@@ -44,16 +60,34 @@ class TitleBar extends React.Component {
     }
 
     render() {
-        // console.log("start render");
-        const addressOption = this.state.addressList.map(
-            (addressBean) => {
-                console.log(addressBean.latitude + " " + addressBean.longitude + " " + addressBean.address);
-                return <AutoComplete.Option
-                    key={addressBean.address }>
-                    {addressBean.address}
-                </AutoComplete.Option>;
-            }
-        );
+        console.log("start render");
+        // console.log(JSON.stringify(this.state.addressList));
+        // let addressOption = new Array();
+        // if (null != this.state.addressList) {
+        //     for (let i = 0; i < this.state.addressList.length; i++) {
+        //         let addressBean = this.state.addressList[i];
+        //         console.log(JSON.stringify(addressBean));
+        //         let item = <AutoComplete.Option
+        //             key={addressBean.latitude + " " + addressBean.longitude}>
+        //             {addressBean.address}
+        //         </AutoComplete.Option>;
+        //         addressOption.push(item);
+        //     }
+        // }
+
+        let addressOption = new Array();
+        if (null != this.state.addressList) {
+            addressOption = this.state.addressList.map(
+                (addressBean) => {
+                    console.dir(JSON.stringify(addressBean));
+                    return <AutoComplete.Option
+                        key={addressBean.latitude + " " + addressBean.longitude}>
+                        {addressBean.address}
+                    </AutoComplete.Option>;
+                }
+            );
+        }
+        // console.log("option size=" + addressOption.length);
         return (
             <div>
                 <Row type="flex" align="middle" justify="space-around">
@@ -62,6 +96,8 @@ class TitleBar extends React.Component {
                     </Col>
                     <Col lg={20} md={18} sm={17}>
                         <AutoComplete
+                            combobox
+                            filterOption={false}
                             style={{width: 300}}
                             onSelect={(value) => this.onSelect(value)}
                             onChange={(value) => this.handleChange(value)}
@@ -72,8 +108,7 @@ class TitleBar extends React.Component {
                     </Col>
                 </Row>
             </div>
-        )
-            ;
+        );
     }
 }
 
@@ -100,7 +135,7 @@ class TitleBar2 extends React.Component {
     render() {
         // const result = this.state.result;
         const children = this.state.result.map((email) => {
-            return <Option key={email}>{email}</Option>;
+            return <AutoComplete.Option key={email}>{email}</AutoComplete.Option>;
         });
         return (
             <AutoComplete
@@ -113,37 +148,6 @@ class TitleBar2 extends React.Component {
         );
     }
 }
-
-// class TitleBar3 extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-//             dataSource: [],
-//         }
-//     }
-//
-//     handleChange(value) {
-//         this.setState({
-//             dataSource: !value ? [] : [
-//                 value,
-//                 value + value,
-//                 value + value + value,
-//             ],
-//         });
-//     }
-//     render() {
-//         const { dataSource } = this.state;
-//         return (
-//             <AutoComplete
-//                 dataSource={dataSource}
-//                 style={{ width: 200 }}
-//                 onSelect={(value) => this.onSelect(value)}
-//                 onChange={(value) => this.handleChange(value)}
-//                 placeholder="input here"
-//             />
-//         );
-//     }
-// }
 
 class MainComponent extends React.Component {
     constructor(props) {
