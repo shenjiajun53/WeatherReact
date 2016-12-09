@@ -4,7 +4,7 @@
 import React from 'react';
 import {Card} from 'antd';
 import {Row, Col} from 'antd';
-import {forcastHourlyWeatherUrl} from  '../Utils.js'
+import {forcastHourlyWeatherUrl, getHourlyIcon} from  '../Utils.js'
 
 const defStyle = {
     marginRight: '100px',
@@ -55,8 +55,8 @@ class HourlyWeatherComponent extends React.Component {
     }
 
     getIconById(iconId) {
-
-        return iconId;
+        let iconUri = getHourlyIcon(iconId);
+        return iconUri;
     }
 
     render() {
@@ -73,9 +73,7 @@ class HourlyWeatherComponent extends React.Component {
                         <div>
                             {this.formatTime(forecastItem.fcst_valid_local)}
                         </div>
-                        <div>
-                            {this.getIconById(forecastItem.icon_code)}
-                        </div>
+                        <img src={require(this.getIconById(forecastItem.icon_code))}/>
                         <div>
                             {forecastItem.temp}
                         </div>

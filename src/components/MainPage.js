@@ -3,15 +3,13 @@
  */
 
 import React from 'react';
-import {Row, Col, AutoComplete, Card, Select} from 'antd';
+import {Row, Col, AutoComplete} from 'antd';
 import logo from '../logo.svg';
-import 'whatwg-fetch'
-import {findCityByName, cityBean} from  '../Utils.js'
+import {findCityByName} from  '../Utils.js'
 import CurrentWeatherCard from './CurrentWeatherCard'
 import HourlyWeatherComponent from './HourlyWeatherComponent'
 import DailyWeatherComponent from './DailyWeatherComponent'
 
-let mCityBean = cityBean;
 
 class TitleBar extends React.Component {
     constructor(props) {
@@ -31,8 +29,8 @@ class TitleBar extends React.Component {
             ).then(
             (json) => {
                 console.dir(JSON.stringify(json));
-                mCityBean = json;
-                if (cityBean.metadata.status_code == 200) {
+                let mCityBean = json;
+                if (mCityBean.metadata.status_code == 200) {
                     this.setState({
                         addressList: mCityBean.addresses,
                         inputValue: value

@@ -88,7 +88,7 @@ var iconDailyMap = {
     36: "res/drawable-hdpi/mini_icons_hot.png",
 };
 
-function getDailyIcon(icon) {
+export function getDailyIcon(icon) {
     if (iconDailyMap[icon] != null) {
         return iconDailyMap[icon];
     } else {
@@ -166,11 +166,11 @@ var iconHourlyMap = {
     36: "res/drawable-hdpi/mini_icons_hot_h.png",
 };
 
-function getHourlyIcon(icon) {
+export function getHourlyIcon(icon) {
     if (iconHourlyMap[icon] != null) {
-        return iconHourlyMap[icon];
+        return "../../"+iconHourlyMap[icon];
     } else {
-        return "res/drawable-hdpi/mini_icons_sunny_h.png";
+        return "../../res/drawable-hdpi/mini_icons_sunny_h.png";
     }
 }
 

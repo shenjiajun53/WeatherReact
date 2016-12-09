@@ -7,12 +7,12 @@ import React from 'react';
 // import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import {Card} from 'antd';
 import {Row, Col} from 'antd';
-import {currentWeatherUrl, currentWeatherBean} from  '../Utils.js'
+import {currentWeatherUrl} from  '../Utils.js'
 
 
 // import hdpi from '../../res/drawable-hdpi';
-let imgUri = "../../res/drawable-hdpi/";
-const high = require("../../res/drawable-hdpi/currnet_high_b.png");
+// let imgUri = "../../res/drawable-hdpi/";
+// const high = require("../../res/drawable-hdpi/currnet_high_b.png");
 
 const defStyle = {
     marginRight: '100px',
@@ -20,8 +20,6 @@ const defStyle = {
     marginTop: '20px',
     marginBottom: '20px'
 };
-
-let mCurrentWeatherBean = currentWeatherBean;
 
 let mLatitude;
 let mLongitude;
@@ -41,7 +39,7 @@ class CurrentWeatherCard extends React.Component {
                 (response) => response.json()
             ).then(
             (json) => {
-                mCurrentWeatherBean = json;
+                let mCurrentWeatherBean = json;
                 console.dir(JSON.stringify(json));
                 if (mCurrentWeatherBean.metadata.status_code == 200) {
                     this.setState({
@@ -70,7 +68,7 @@ class CurrentWeatherCard extends React.Component {
             const metricBean = this.state.currentWeatherBean.observation.metric;
             return (
                 <Card className="card-content" style={defStyle}>
-                    <Row  type="flex" align="middle" justify="space-between">
+                    <Row type="flex" align="middle" justify="space-between">
                         <Col lg={8} md={12} sm={4}>
                             {metricBean.temp}
                         </Col>
