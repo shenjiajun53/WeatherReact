@@ -5,6 +5,7 @@ import React from 'react';
 import {Card} from 'antd';
 import {Row, Col} from 'antd';
 import {forcastHourlyWeatherUrl, getHourlyIcon} from  '../Utils.js'
+// import uri from '../../res/drawable-hdpi/mini_icons_sunny_h.png';
 
 const defStyle = {
     marginRight: '100px',
@@ -12,6 +13,10 @@ const defStyle = {
     marginTop: '20px',
     marginBottom: '20px'
 };
+
+// const uri='../../res/drawable-hdpi/mini_icons_sunny_h.png';
+// let iconUri = require(uri);
+// let uri = require('../../res/drawable-hdpi/mini_icons_sunny_h.png');
 
 let mLatitude;
 let mLongitude;
@@ -56,6 +61,7 @@ class HourlyWeatherComponent extends React.Component {
 
     getIconById(iconId) {
         let iconUri = getHourlyIcon(iconId);
+        console.log("iconUri=" + iconUri);
         return iconUri;
     }
 
@@ -73,7 +79,7 @@ class HourlyWeatherComponent extends React.Component {
                         <div>
                             {this.formatTime(forecastItem.fcst_valid_local)}
                         </div>
-                        <img src={require(this.getIconById(forecastItem.icon_code))}/>
+                        <img src={this.getIconById(forecastItem.icon_code)}/>
                         <div>
                             {forecastItem.temp}
                         </div>
