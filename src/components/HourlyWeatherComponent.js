@@ -105,11 +105,8 @@ class HourlyWeatherComponent extends React.Component {
                     padding: 0
                 }}>
                     <Row type="flex" align="middle" justify="space-around" style={{
-
                         background: "#f5f5f5"
-                    }} bodyStyle={{
-                        padding: 0
-                    }}>
+                    }} >
                         {forecastItemList}
                     </Row>
                 </Card>
