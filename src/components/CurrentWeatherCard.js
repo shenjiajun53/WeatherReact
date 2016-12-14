@@ -18,7 +18,10 @@ const defStyle = {
     marginRight: '100px',
     marginLeft: '100px',
     marginTop: '20px',
-    marginBottom: '20px'
+    marginBottom: '20px',
+    padding: "0px",
+    fontSize: "14px",
+    fontFamily: "Georgia"
 };
 
 let mLatitude;
@@ -67,12 +70,20 @@ class CurrentWeatherCard extends React.Component {
             const observationBean = this.state.currentWeatherBean.observation;
             const metricBean = this.state.currentWeatherBean.observation.metric;
             return (
-                <Card className="card-content" style={defStyle}>
-                    <Row type="flex" align="middle" justify="space-between">
-                        <Col lg={8} md={12} sm={4}>
-                            {metricBean.temp}
+                <Card className="card-content" style={defStyle}
+                      bodyStyle={{
+                          padding: 0
+                      }}>
+                    <Row type="flex" align="middle" justify="space-between"
+                         style={{
+                             marginTop: "10px",
+                             marginBottom: "10px",
+                             background: "#ffffff"
+                         }}>
+                        <Col lg={8} md={12} sm={4} style={{fontSize: "20px"}}>
+                            {metricBean.temp}℃
                         </Col>
-                        <Col lg={16} md={12} sm={20}>
+                        <Col lg={16} md={12} sm={20} style={{fontSize: "16px"}}>
                             <span id="current_phrase">
                                 {observationBean.phrase_32char}
                             </span>
@@ -83,9 +94,15 @@ class CurrentWeatherCard extends React.Component {
                         </Col>
                     </Row>
 
-                    <div className="card_line"></div>
+                    <div className="divider" style={{
+                        height: "1px",
+                        background: "#ebebeb"
+                    }}></div>
 
-                    <div className=" grey lighten-3">
+                    <div style={{
+                        padding: "20px",
+                        background: "#f5f5f5"
+                    }}>
                         <Row >
                             <Col span={6} id="temper_high_div">
                                 <div>高</div>

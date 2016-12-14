@@ -11,7 +11,9 @@ const defStyle = {
     marginRight: '100px',
     marginLeft: '100px',
     marginTop: '20px',
-    marginBottom: '20px'
+    marginBottom: '20px',
+    fontSize: "14px",
+    fontFamily: "Georgia"
 };
 
 // const uri='../../res/drawable-hdpi/mini_icons_sunny_h.png';
@@ -72,24 +74,43 @@ class HourlyWeatherComponent extends React.Component {
             this.getHourlyWeather();
         }
         if (null != this.state.hourlyWeatherBean) {
-            let forcastList = this.state.hourlyWeatherBean.forecasts;
-            let focastItemList = forcastList.map(
+            let forecastList = this.state.hourlyWeatherBean.forecasts;
+            let forecastItemList = forecastList.map(
                 (forecastItem) => {
                     return <Col lg={1} md={3} sm={6} key={forecastItem.num}>
-                        <div>
+                        <div style={{
+                            marginTop: "10px",
+                            marginBottom: "10px"
+                        }}>
                             {this.formatTime(forecastItem.fcst_valid_local)}
                         </div>
-                        <img src={this.getIconById(forecastItem.icon_code)}/>
-                        <div>
-                            {forecastItem.temp}
+                        <div className="divider" style={{
+                            height: "1px",
+                            background: "#ebebeb"
+                        }}></div>
+
+                        <img src={this.getIconById(forecastItem.icon_code)} style={{
+                            marginTop: "10px",
+                        }}/>
+                        <div style={{
+                            marginBottom: "10px"
+                        }}>
+                            {forecastItem.temp}º
                         </div>
                     </Col>
                 }
             );
             return (
-                <Card style={defStyle}>
-                    <Row type="flex" align="middle" justify="space-around">
-                        {focastItemList}
+                <Card style={defStyle} bodyStyle={{
+                    padding: 0
+                }}>
+                    <Row type="flex" align="middle" justify="space-around" style={{
+
+                        background: "#f5f5f5"
+                    }} bodyStyle={{
+                        padding: 0
+                    }}>
+                        {forecastItemList}
                     </Row>
                 </Card>
             )

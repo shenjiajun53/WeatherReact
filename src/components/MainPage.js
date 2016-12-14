@@ -10,6 +10,7 @@ import CurrentWeatherCard from './CurrentWeatherCard'
 import HourlyWeatherComponent from './HourlyWeatherComponent'
 import DailyWeatherComponent from './DailyWeatherComponent'
 
+const CURRENT_CITY = "current_city";
 
 class TitleBar extends React.Component {
     constructor(props) {
@@ -51,6 +52,7 @@ class TitleBar extends React.Component {
     onSelect(value) {
         console.log('onSelect', value);
         this.props.getSelectedLocation(value);
+        localStorage.setItem(CURRENT_CITY, value);
     }
 
     render() {
@@ -93,7 +95,7 @@ class TitleBar extends React.Component {
                             combobox
                             filterOption={false}
                             style={{width: 300}}
-                            onSelect={(value) => this.props.getSelectedLocation(value)}
+                            onSelect={(value) => this.onSelect(value)}
                             onSearch={(value) => this.handleChange(value)}
                             placeholder="输入城市名"
                         >
@@ -113,6 +115,22 @@ class MainComponent extends React.Component {
             latitude: null,
             longitude: null,
             address: null,
+        }
+    }
+
+    componentWillMount() {
+        let currentCity = localStorage.getItem(CURRENT_CITY);
+        if (null !== currentCity) {
+            let strArray = currentCity.split("_");
+            // console.log(strArray[0]);
+            // console.log(strArray[1]);
+            this.setState(
+                {
+                    latitude: strArray[0],
+                    longitude: strArray[1],
+                    address: strArray[2]
+                }
+            )
         }
     }
 
